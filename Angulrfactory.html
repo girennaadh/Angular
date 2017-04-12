@@ -1,0 +1,58 @@
+<html>
+    <head>
+    </head>
+    <body>
+    <script src="bower_components/angular/angular.js"></script>
+        <script>
+        
+       var sample= angular.module("sample",[]);
+            sample.controller("name",["$scope",'calcFactory',function($scope,calcFactory){
+                $scope.a=10;
+                
+                $scope.b=20;
+                
+                $scope.doSum=function(){
+                // $scope.sum=calcFactory.getSum($scope.a,$scope.b); synchronus way
+ /* asynchronus*/   calcFactory.getSum($scope.a,$scope.b,function(r){
+                       $scope.sum=r; 
+                    });
+                };
+            }]);
+            /***  factory  */
+            sample.factory('calcFactory',['$http','$log',function($http,$log){
+             $log.log("Instantiating calcfactory");
+                var ocalcService={};
+                ocalcService.getSum=function(a,b,cb){
+                    //return = parseInt(a)+parseInt(b); synchronus way
+                     var s=parseInt(a)+parseInt(b);
+                    cb(s);
+                    
+                };
+                console.log(ocalcService);
+                return ocalcService;
+                
+            }])
+            
+        </script>
+        
+        <div ng-app="sample">
+            <div ng-controller="name">
+                <div>
+                value of a is {{ a }},
+                    <input type="text" ng-model="a" /> <br>
+                    
+                value of b is {{b}},  
+                    <input type="text" ng-model="b" /> <br>
+                </div>
+                
+            Sum = {{ sum }} <br>
+            <button ng-click="doSum()">Calculate</button>
+            </div>
+            
+         
+        
+        </div>
+        
+    </body>
+    
+</html>
